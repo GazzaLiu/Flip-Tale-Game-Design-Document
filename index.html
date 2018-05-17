@@ -1,0 +1,905 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>Flip Tale Game Design Document</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="style.css" title="style" />
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+    <div class="w3-sidebar w3-bar-block w3-light-grey w3-card" style="width: 240px;">
+        <a href="#6.4.1" class="w3-bar-item w3-button">6.4.1 Overview</a>
+        <a href="#6.4.2" class="w3-bar-item w3-button">6.4.2 Flow</a>
+        <button class="w3-button w3-block w3-left-align" onclick="myAccFunc('6.4.3')">6.4.3 Stage 2-1<i class="fa fa-caret-down"></i></button>
+        <div id="6.4.3" class="w3-hide w3-white w3-card">
+            <a href="#6.4.3.1" class="w3-bar-item w3-button">6.4.3.1 Game Object</a>
+            <a href="#6.4.3.2" class="w3-bar-item w3-button">6.4.3.2 Event</a>
+        </div>
+        <button class="w3-button w3-block w3-left-align" onclick="myAccFunc('6.4.4')">6.4.4 Stage 2-2<i class="fa fa-caret-down"></i></button>
+        <div id="6.4.4" class="w3-hide w3-white w3-card">
+            <a href="#6.4.4.1" class="w3-bar-item w3-button">6.4.4.1 Game Object</a>
+            <a href="#6.4.4.2" class="w3-bar-item w3-button">6.4.4.2 Event</a>
+        </div>
+        <button class="w3-button w3-block w3-left-align" onclick="myAccFunc('6.4.5')">6.4.5 Stage 2-3<i class="fa fa-caret-down"></i></button>
+        <div id="6.4.5" class="w3-hide w3-white w3-card">
+            <a href="#6.4.5.1" class="w3-bar-item w3-button">6.4.5.1 Game Object</a>
+            <a href="#6.4.5.2" class="w3-bar-item w3-button">6.4.5.2 Event</a>
+        </div>
+    </div>
+    <div class="w3-container" style="margin-left:240px; margin-right:200px;">
+
+        <div id="1">
+            <h1>1 Design History</h1>
+        </div>
+
+        <div id="2">
+            <h1>2 Game Overview</h1>
+            <div id="2.1">
+                <h2>2.1 Introduction</h2>
+                <pre style="white-space: pre-wrap;">    本遊戲為2D橫向動作解謎遊戲，目前發布的平台為PC（Windows/Mac）。玩家須操縱主角並利用其「翻轉」能力與世界互動：穿梭於兩個世界之間並利用在不同世界中輪廓相同而內容相異所形成的物件解開謎題前進，從而瞭解整個世界。最後試圖釐清並解開白光、小男孩的真相與整起事件的始末。</pre>
+            </div>
+            <div id="2.2">
+                <h2>2.2 Features</h2>
+                <pre style="white-space: pre-wrap;">    融合翻轉機制的謎題：玩家在遊戲中必須活用「翻轉」－試圖思考相同輪廓而不同內容之物件的關聯性，並與場景、NPC等互動，進而解開謎題。</pre>
+            </div>
+            <div id="2.3">
+                <h2>2.3 Idea</h2>
+                <pre style="white-space: pre-wrap;">    藉由探索主兩個人格之間的轉換，讓玩家瞭解到人看待世界的方式，重新省思自己的內心世界。使人尋找適當方法，更是瞭解到紓解壓力的重要性，學習培養健康心靈，邁向更加健全的人生。</pre>
+            </div>
+        </div>
+
+        <div id="3">
+            <h1>3 Game Mechanics</h1>
+            <div id="3.1">
+                <h2>3.1 Overview</h2>
+                <pre style="white-space: pre-wrap;">    以下將分別解釋遊戲中的某些系統的需求。</pre>
+            </div>
+            <div id="3.2">
+                <h2 title="18/03/29;18/04/12">3.2 Control & State Machine</h2>
+                <pre style="white-space: pre-wrap;">    方向鍵（上）：跳躍／進入／上爬；方向鍵（左右）：移動；Z鍵：翻轉；X鍵：拾取物品／使用物品／觸發／觸發對話／加速對話／放下物品（長按）；C鍵：開啟筆記本／關閉筆記本。只讓掉在地上的道具（白框）可以用pick直接互換如果有門但打不開，按上時會把跳躍吃掉，發出鎖住的音效並顯示對話框</pre>
+            </div>
+            <div id="3.3">
+                <h2>3.3 Flip</h2>
+                <pre style="white-space: pre-wrap;">    </pre>
+            </div>
+            <div id="3.4">
+                <h2>3.4 Dialogue</h2>
+                <pre style="white-space: pre-wrap;">    對於對白的觸發方式，可依照觸發的條件而區分為「空間條件」與「其他條件」。前者為設定某個觸發區域，當主角一走進該區域即可滿足該條件；後者則是玩家必須滿足其他的條件。而當玩家滿足上述條件後在按下所指定的按鍵即可觸發對話。一般而言獨白多為僅需空間條件的達成，尚須滿足其他條件之型態多用於對話或使用物品之情況。此外在某些條件下會有較為特殊的對白，關於此種對白多與重要劇情有關，另行標出。
+
+				而根據對白觸發次數亦可分為一次性或重複性對白。對白觸發時並不會凍結玩家的操作，因此玩家仍可自由翻轉、移動、拾取、放下或使用物品等。另外有些對白觸發時為隨機對白，即每次在「遊戲狀態條件相同」的情況下觸發該對白，並不一定會顯示同一種內容。
+				
+				基本上對白可區分為對白框與對白文字兩部分，對於對白框在觸發對白時以淡入形式顯現，在同一對白事件下文字切換時並不會跟著淡入淡出，且框之大小亦不變，唯該對白事件結束後對話框尚可跟隨對白文字一同淡出。
+				<img src=""></pre>
+            </div>
+            <div>
+                <h2 title="18/03/08">3.5 Animation</h2>
+                <pre style="white-space: pre-wrap;">    未來有動畫時讓畫面的上下兩邊切入黑邊，像在看電影一樣，這時候完全鎖住玩家的行動。</pre>
+            </div>
+            <div id="3.5">
+                <h2 title="18/03/15;18/03/22">3.5 Idea</h2>
+                <pre style="white-space: pre-wrap;">    按下按鍵C呼叫出來，形式看起來像筆記本，利用方向鍵翻頁，再按一次C退出當滿足一定條件，主角頭上出現燈泡，提示玩家可以去看idea</pre>
+            </div>
+            <div id="3.6">
+                <h2>3.6 Save & Load</h2>
+                <pre style="white-space: pre-wrap;">    遊戲的存檔機制可分為大關間存檔與大關內存檔：前者以大關為單位存檔（例如：玩家破完第一關之後，下次開啟可從第二關開始。）；後者在關卡內為「完全存檔」，當玩家觸發存檔事件時，遊戲即將遊戲當時的狀態（包含任務進度、事件觸發、物件狀態、場景狀態、主角狀態等完全保存）。關於存檔事件的觸發，當玩家在場景某處看到當初父親送給主角的「渡鴉」時，對著牠按C（無論是否有手持物件）即可存檔。
+
+				遊戲的讀檔機制則透過UI系統實作，選單內會有讀檔選項，當玩家選擇選項則讀取相應的存檔。
+				</pre>
+            </div>
+        </div>
+
+        <div id="4">
+            <h1>4 Game Flow</h1>
+            <div id="4.1">
+                <h2>4.1 Overview</h2>
+                <pre style="white-space: pre-wrap;">    遊戲共分為三大關與一小段教學關卡，當玩家完成第三關後即進入結局，遊戲結束。</pre>
+            </div>
+            <div id="4.2">
+                <h2>4.2 World View</h2>
+                <pre style="white-space: pre-wrap;">    遊戲中的整個世界都是主角的潛意識所投射出來的世界，正面是藉由主角長大後人格所「感受、理解到的世界」；反面則是主角尚小時人格所「感受、理解到的世界」。因此，正面世界的場景與物件自然會比較貼近現實（因為是長大後所看到的），而反面則較不受拘束（小時候有很多的想像）。
+                    　　無論是哪一個世界，客觀來說都不屬於現實。在兩個世界切換時有以下幾點設定：
+                    	有些物件在正反面輪廓相同，而內容不同；甚至正反兩面可能一面為生物、一面為無生命。
+	正反兩面切換時所有東西的動能都會被保留。
+	正反兩面的「同一個NPC」並不知道彼此的存在，知識也不共有。</pre>
+            </div>
+            <div id="4.3">
+                <h2>4.3 Plot</h2>
+                <pre>   事實上正當主角下班回家時就被一輛突如其來的車撞死了（白光正是該車的大燈），因此遊戲中的世界也正是主角死後的世界，在初始場景的墓碑就是主角自己的墓碑。而小男孩則是主角小時候的模樣，代表著主角在小時候充滿童心、夢想的自我，即為主角之反面人格。而正面人格則是代表著主角在社會化的歷程中受盡壓榨欺凌，進而遺忘自己從小的夢想的自我。
+
+                        本遊戲有兩主不同的結局，在不同的人格或條件達成下將觸發不同的遊戲結局。第一種結局：如果玩家切換成真實世界壓抑的人格回到原點，玩家將發現：遊戲開始的墓碑竟然就是自己的墓碑，原來主角長期活在生活壓力之下，為了滿足自己身邊的人種種的要求，不斷的把情緒深埋在心底，沒有任何方法宣泄，最終邁向毀滅之路。第二種結局：如果主角以夢境中不受拘束開闊的人格回到原點，主角發現墓碑上寫著自己的名子，忽然想起自己其實已經在一場車禍中意外身亡，主角拿起身旁一束花獻給自己，坦然的面對這一切，獲得救贖。
+                        </pre>
+            </div>
+        </div>
+
+        <h2>6.4 Stage 2</h2>
+        <div id="6.4.1">
+            <h3>6.4.1 Overview</h3><pre style="white-space: pre-wrap;">　　本關的正面是一間工廠，其營造出的些許破舊、生鏽、黯淡的感覺與主角的正面人格產生呼應。由於長大後的主角長期處在一套受壓迫的制度下，而工廠的老闆（也就是小男孩的另一面）則代表著在這套制度下，主角投射自己是工廠的老闆，嘗試著成為該制度下的統治者，但終究是一場空，他要求底下的人日以繼夜的工作。而這個工廠生產著人偶：矮小、結構單純、只能做低階勞動的人形無機體，需要以某種燃料或能量驅動，人偶會製造更多的人偶，重複無意義的生產。背後象徵著：工廠主人看似擁有很多，但其實根本沒有意義。
+
+　　反面則是一座宏大、端莊，磚造的中世紀城堡，也是主角小時候心中所嚮往的歸處、最初的夢想。城堡的「王」是主角的過去－小男孩。他告訴底下的人，今天要辦一場派對、要準備宴客（其實就是歡迎主角）。
+
+　　本大關旨在藉由加入大量的NPC與任務，使玩家可與其對話、互動，以增加遊戲故事性與關卡難度，使玩家思考主角的個性與境遇，並導向及暗示最後的結局。</pre></div>
+        <div id="6.4.2">
+            <h3>6.4.2 Flow</h3><pre style="white-space: pre-wrap;">統一場景名稱如下：
+
+	2-1a~2-1f：工廠牆外／城牆外
+	2-2a：生產線／廚房
+	2-2b：輸送帶／餐廳
+	2-3a~2-3b：工廠走廊／城堡走廊
+	2-3c：工廠雜具間／城堡雜具間
+	2-4a~2-4d：工廠大廳／城堡大廳
+	2-5a：工廠左樓梯走廊／城堡左樓梯走廊
+	2-5b：員工宿舍／主臥室
+	2-5c：宿舍陽台／臥室陽台
+	2-6a：工廠右樓梯走廊／城堡右樓梯走廊
+	2-6b：研究室／演奏室
+	2-6c~2-6d：研究室深處／儲藏室
+	2-7a：廠長門前／國王門前
+	2-7b~2-7c：辦公室／王位
+	2-8a：動力室／謎題室
+	2-8b：霓虹之間／記憶之間
+	2-8c：鍋爐室／酒窖
+	2-9a~2-9c：煙囪／塔
+	2-9d：煙囪頂／塔頂
+	2-10：內心深處／鏡子密室
+
+場景連結如下：</pre></div>
+        <div id="6.4.3">
+            <h3>6.4.3 Stage 2-1</h3>
+            <div id="6.4.3.1"><img src="2-1.png">
+                <table class="tableizer-table">
+                    <thead>
+                        <tr class="tableizer-firstrow">
+                            <th>代號</th>
+                            <th>名稱</th>
+                            <th>翻轉</th>
+                            <th>拾取行為</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>A</td>
+                            <td>草地</td>
+                            <td>變色</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>草地</td>
+                            <td>&nbsp;</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>B</td>
+                            <td>大門</td>
+                            <td>翻轉</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>大門</td>
+                            <td>&nbsp;</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>C1</td>
+                            <td>小垃圾堆</td>
+                            <td>翻轉</td>
+                            <td>隨機取得［紙團、紙團、紙團、紙團］</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>小樹叢</td>
+                            <td>&nbsp;</td>
+                            <td>隨機取得［紅果實、黃果實、綠果實、紫果實］</td>
+                        </tr>
+                        <tr>
+                            <td>C2</td>
+                            <td>垃圾堆</td>
+                            <td>翻轉</td>
+                            <td>隨機取得［鏟子、電池］</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>樹叢</td>
+                            <td>&nbsp;</td>
+                            <td>隨機取得［連有大葉片的枝條、木樁］</td>
+                        </tr>
+                        <tr>
+                            <td>D</td>
+                            <td>電線桿／電線</td>
+                            <td>變色／變色</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>樹／藤蔓</td>
+                            <td>&nbsp;</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>E</td>
+                            <td>側門</td>
+                            <td>翻轉</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>側門</td>
+                            <td>&nbsp;</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>F</td>
+                            <td>回收桶</td>
+                            <td>翻轉</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>塔門</td>
+                            <td>&nbsp;</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>G</td>
+                            <td>貨箱</td>
+                            <td>翻轉</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>側門</td>
+                            <td>&nbsp;</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>H</td>
+                            <td>貨架</td>
+                            <td>變色</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>石階</td>
+                            <td>&nbsp;</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>I</td>
+                            <td>移動台</td>
+                            <td>變色</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>-</td>
+                            <td>&nbsp;</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>J</td>
+                            <td>面板</td>
+                            <td>翻轉</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>石板</td>
+                            <td>&nbsp;</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>K</td>
+                            <td>鐵鍊</td>
+                            <td>變色</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>藤蔓</td>
+                            <td>&nbsp;</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>L</td>
+                            <td>外牆</td>
+                            <td>變色</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>外牆</td>
+                            <td>&nbsp;</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>註一</td>
+                            <td>烏雲</td>
+                            <td>翻轉</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>白雲</td>
+                            <td>&nbsp;</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>註二</td>
+                            <td>蓬鬆的粉紅雲</td>
+                            <td>翻轉</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>蓬鬆的白雲</td>
+                            <td>&nbsp;</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>-</td>
+                            <td>紙團、紙團、紙團、紙團</td>
+                            <td>翻轉</td>
+                            <td>落下後消失</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>紅果實、黃果實、綠果實、紫果實</td>
+                            <td>&nbsp;</td>
+                            <td>落下後消失</td>
+                        </tr>
+                        <tr>
+                            <td>-</td>
+                            <td>鏟子</td>
+                            <td>翻轉</td>
+                            <td>落下後消失</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>連有大葉片的枝條</td>
+                            <td>&nbsp;</td>
+                            <td>落下後消失</td>
+                        </tr>
+                        <tr>
+                            <td>-</td>
+                            <td>電池</td>
+                            <td>翻轉</td>
+                            <td>落下後消失</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>木樁</td>
+                            <td>&nbsp;</td>
+                            <td>落下後消失</td>
+                        </tr>
+                        <tr>
+                            <td>-</td>
+                            <td>鏟有雲的鏟子</td>
+                            <td>翻轉</td>
+                            <td>落下後消失</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>棉花糖</td>
+                            <td>&nbsp;</td>
+                            <td>落下後消失</td>
+                        </tr>
+                        <tr>
+                            <td>-</td>
+                            <td>鐵撬</td>
+                            <td>翻轉</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>拐杖糖</td>
+                            <td>&nbsp;</td>
+                            <td>-</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div>
+            <table class="tableizer-table">
+                <thead>
+                    <tr class="tableizer-firstrow">
+                        <th>前置條件</th>
+                        <th>結算結果</th>
+                        <th>備註</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>空間</td>
+                        <td>物件</td>
+                        <td>其他</td>
+                        <td>物件</td>
+                        <td>敘述</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>2-1b／樹處／反</td>
+                        <td>普通的匕首</td>
+                        <td>-</td>
+                        <td>普通的匕首</td>
+                        <td>樹皮被劃開，流出樹汁</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>2-1b／樹處／反</td>
+                        <td>顏料刷子</td>
+                        <td>樹皮被劃開，流出樹汁</td>
+                        <td>沾有樹汁的顏料刷子</td>
+                        <td>利用顏料刷子沾上樹汁</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>2-1c／側門處／正</td>
+                        <td>鐵撬</td>
+                        <td>-</td>
+                        <td>鐵撬</td>
+                        <td>側門被撬開</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>2-1c／廚師處／反</td>
+                        <td>棉花糖</td>
+                        <td>-</td>
+                        <td>拐杖糖</td>
+                        <td>交付棉花糖，廚師給予拐杖糖</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>2-1d／塔門處／正</td>
+                        <td>塔的鑰匙</td>
+                        <td>-</td>
+                        <td>塔的鑰匙</td>
+                        <td>塔門被打開</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>2-1e／面板／正</td>
+                        <td>通行證</td>
+                        <td>貨架與貨箱在左側</td>
+                        <td>通行證</td>
+                        <td>操作面板燈亮，貨架載著貨箱由左移動到右</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>2-1e／面板／正</td>
+                        <td>通行證</td>
+                        <td>貨架與貨箱在右側</td>
+                        <td>通行證</td>
+                        <td>操作面板燈亮，貨架載著貨箱由右移動到左</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>2-1x／蓬鬆的粉紅雲前／正</td>
+                        <td>鏟子</td>
+                        <td>-</td>
+                        <td>鏟有雲的鏟子</td>
+                        <td>利用鏟子將雲鏟起</td>
+                        <td>-</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="6.4.4">
+            <h3>6.4.4 Stage 2-2</h3>
+        </div>
+        <div id="6.4.4.1">
+            <h4>6.4.4.1 Game Object</h4><img src="2-2.png">
+            <table class="tableizer-table">
+                <thead>
+                    <tr class="tableizer-firstrow">
+                        <th>代號</th>
+                        <th>名稱</th>
+                        <th>翻轉</th>
+                        <th>拾取</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>A</td>
+                        <td>地面</td>
+                        <td>變色</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>地面</td>
+                        <td>&nbsp;</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>B</td>
+                        <td>牆壁</td>
+                        <td>變色</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>牆壁</td>
+                        <td>&nbsp;</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>C</td>
+                        <td>工作臺</td>
+                        <td>變色</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>廚房</td>
+                        <td>&nbsp;</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>D</td>
+                        <td>側門</td>
+                        <td>變色</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>側門</td>
+                        <td>&nbsp;</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>E</td>
+                        <td>拱門</td>
+                        <td>變色</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>拱門</td>
+                        <td>&nbsp;</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>F</td>
+                        <td>門</td>
+                        <td>翻轉</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>門</td>
+                        <td>&nbsp;</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>G</td>
+                        <td>人偶</td>
+                        <td>翻轉</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>椅子</td>
+                        <td>&nbsp;</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>H</td>
+                        <td>輸送帶</td>
+                        <td>變色</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>桌子</td>
+                        <td>&nbsp;</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>I</td>
+                        <td>鍋子</td>
+                        <td>翻轉</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>鍋子</td>
+                        <td>&nbsp;</td>
+                        <td>-</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="6.4.4.2">
+            <table class="tableizer-table">
+                <thead>
+                    <tr class="tableizer-firstrow">
+                        <th>前置條件</th>
+                        <th>結算結果</th>
+                        <th>備註</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>空間</td>
+                        <td>物件</td>
+                        <td>其他</td>
+                        <td>物件</td>
+                        <td>敘述</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="6.4.5">
+            <h3>6.4.5 Stage 2-3</h3>
+        </div>
+        <div id="6.4.5.1"><img src="2-3.png">
+            <table class="tableizer-table">
+                <thead>
+                    <tr class="tableizer-firstrow">
+                        <th>代號</th>
+                        <th>名稱</th>
+                        <th>翻轉</th>
+                        <th>拾取</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>A</td>
+                        <td>地面</td>
+                        <td>變色</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>地面</td>
+                        <td>&nbsp;</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>B</td>
+                        <td>牆壁</td>
+                        <td>變色</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>牆壁</td>
+                        <td>&nbsp;</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>C</td>
+                        <td>門</td>
+                        <td>翻轉</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>門</td>
+                        <td>&nbsp;</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>D</td>
+                        <td>門</td>
+                        <td>翻轉</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>門</td>
+                        <td>&nbsp;</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>E1</td>
+                        <td>設計圖</td>
+                        <td>翻轉</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>畫</td>
+                        <td>&nbsp;</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>E2</td>
+                        <td>設計圖</td>
+                        <td>翻轉</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>畫</td>
+                        <td>&nbsp;</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>E3</td>
+                        <td>設計圖</td>
+                        <td>翻轉</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>畫</td>
+                        <td>&nbsp;</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>E4</td>
+                        <td>設計圖</td>
+                        <td>翻轉</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>畫</td>
+                        <td>&nbsp;</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>F</td>
+                        <td>牆壁</td>
+                        <td>變色</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>牆壁</td>
+                        <td>&nbsp;</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>G</td>
+                        <td>面板</td>
+                        <td>翻轉</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>石板</td>
+                        <td>&nbsp;</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>H</td>
+                        <td>按鈕</td>
+                        <td>翻轉</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>木板</td>
+                        <td>&nbsp;</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>I</td>
+                        <td>空瓶箱</td>
+                        <td>翻轉</td>
+                        <td>取得［空瓶］</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>空瓶箱</td>
+                        <td>&nbsp;</td>
+                        <td>取得［空瓶］</td>
+                    </tr>
+                    <tr>
+                        <td>J</td>
+                        <td>刷子</td>
+                        <td>翻轉</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>刷子</td>
+                        <td>&nbsp;</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>K</td>
+                        <td>顏料罐</td>
+                        <td>翻轉</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>顏料罐</td>
+                        <td>&nbsp;</td>
+                        <td>-</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="6.4.5.2">
+            <table class="tableizer-table">
+                <thead>
+                    <tr class="tableizer-firstrow">
+                        <th>前置條件</th>
+                        <th>結算結果</th>
+                        <th>備註</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>空間</td>
+                        <td>物件</td>
+                        <td>其他</td>
+                        <td>物件</td>
+                        <td>敘述</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>2-3a／按鈕處／正</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>設計圖E1和E2內容對調</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>2-3b／右側按鈕處／正</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>設計圖E2和E3內容對調</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>2-3b／左側按鈕處／正</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>設計圖E3和E4內容對調</td>
+                        <td>-</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        function myAccFunc(targetId) {
+            var x = document.getElementById(targetId);
+            if (x.className.indexOf("w3-show") == -1) {
+                x.className += " w3-show";
+                x.previousElementSibling.className += " w3-green";
+            } else {
+                x.className = x.className.replace(" w3-show", "");
+                x.previousElementSibling.className =
+                    x.previousElementSibling.className.replace(" w3-green", "");
+            }
+        }
+
+        function myDropFunc() {
+            var x = document.getElementById("demoDrop");
+            if (x.className.indexOf("w3-show") == -1) {
+                x.className += " w3-show";
+                x.previousElementSibling.className += " w3-green";
+            } else {
+                x.className = x.className.replace(" w3-show", "");
+                x.previousElementSibling.className =
+                    x.previousElementSibling.className.replace(" w3-green", "");
+            }
+        }
+    </script>
+</body>
+
+</html>
